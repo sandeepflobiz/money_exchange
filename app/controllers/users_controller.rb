@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
-  before_action :authenticate_request!, only: %i[index edit]
+  before_action :authenticate_request!, only: %i[update]
   # GET /users or /users.json
   def index
     @users = User.all
@@ -44,14 +44,15 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to @user, notice: "User was successfully updated." }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    begin
+      @user = User.find(params[:id])
+      @user.name = params[:name]
+      @user.password = params[:password]
+      @user.save!
+
+      render :json=>{message:"Updated successfully"}
+    rescue =>error
+      render json:{message:error}
     end
   end
 
@@ -72,6 +73,11 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit( :name, :mobile, :password, :password_confirmation)
+      params_required = params.require(:user).permit( :name, :mobile, :password, :password_confirmation)
+      params_required.delete(:password) unless params_required[:password].present?
+      params_required.delete(:password_confirmation) unless params_required[:password_confirmation].present?
+
+      puts params_required
+      params_required
     end
 end
