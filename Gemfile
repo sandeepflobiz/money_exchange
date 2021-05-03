@@ -57,3 +57,4 @@ gem 'redis'
 gem 'redis-namespace'
 gem 'redis-rails'
 gem 'dotenv-rails', groups: [:development, :test]
+gem 'bcrypt-ruby', '3.1.2'
