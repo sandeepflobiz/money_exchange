@@ -17,20 +17,27 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    puts "in edit method"
+    render :json=>{message: "edit method"}
   end
 
   # POST /users or /users.json
   def create
-    @user = User.new(user_params)
+    @user = User.new
+    @user.name = params[:name]
+    @user.mobile = params[:mobile]
+    @user.password = params[:password]
+    @user.password_confirmation = params[:password_confirmation]
+    begin
 
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to @user, notice: "User was successfully created." }
-        format.json { render :show, status: :created, location: @user }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+      @user.save!
+      render json: {message: "record created successfully"}
+      # format.html { redirect_to @user, notice: "User was successfully created." }
+      # format.json { render :show, status: :created, location: @user }
+    rescue =>error
+      render json: {message: error}
+      # format.html { render :new, status: :unprocessable_entity }
+      # format.json { render json: @user.errors, status: :unprocessable_entity }
     end
   end
 
@@ -64,6 +71,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:name, :mobile, :password, :status)
+      params.require(:user).permit( :name, :mobile, :password, :password_confirmation)
     end
 end
