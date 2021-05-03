@@ -1,9 +1,10 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
-
+  before_action :authenticate_request!, only: %i[index edit]
   # GET /users or /users.json
   def index
     @users = User.all
+    render :json=>{message:"User has been authorized"}
   end
 
   # GET /users/1 or /users/1.json
