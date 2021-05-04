@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_04_064535) do
+ActiveRecord::Schema.define(version: 2021_05_04_074154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 2021_05_04_064535) do
   create_table "accounts", force: :cascade do |t|
     t.integer "account_number"
     t.integer "user_id"
-    t.integer "rupee"
+    t.decimal "rupee"
     t.decimal "dollar"
     t.decimal "pound"
     t.decimal "yen"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2021_05_04_064535) do
     t.integer "secondary_currency", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "amount"
   end
 
   create_table "transfers", force: :cascade do |t|
@@ -41,6 +42,7 @@ ActiveRecord::Schema.define(version: 2021_05_04_064535) do
     t.integer "currency", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "amount"
   end
 
   create_table "users", force: :cascade do |t|
