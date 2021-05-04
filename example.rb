@@ -1,5 +1,7 @@
 class User
-  attr_accessor :name, :email
+  attr_accessor :name,:email
+  # attr_reader :name, :email
+  # attr_writer :name, :email
 
   def initialize(attributes = {})
     @name  = attributes[:name]
@@ -10,3 +12,9 @@ class User
     "#{@name} <#{@email}>"
   end
 end
+
+user = User.new
+user.name = "sandeep"
+user.email = "sandeep"
+
+puts user.name
