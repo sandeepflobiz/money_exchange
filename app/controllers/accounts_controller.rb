@@ -1,18 +1,13 @@
 class AccountsController < ApplicationController
   before_action :authenticate_request
   def create
+    params["user_id"]=@current_user.id
     begin
-      new_account = Account.new(account_params)
-      new_account.user_id = @current_user.id
-      new_account.save!
-      render json: {:message=>"Account created"}
+      puts "hi #{params}"
+      CreateAccount.call(params)
+      render :json=>{message:"Account created successfully"}
     rescue =>error
-      render json: {:message=>error.to_s}
+      render :json=>{message:error}
     end
   end
-
-  private
-    def account_params
-      params.require(:account).permit(:account_number,:rupee,:dollar,:pound,:yen,:taka)
-    end
 end
