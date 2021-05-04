@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
   before_action :authenticate_request!, only: %i[update]
+  after_action :chill
   # GET /users or /users.json
   def index
     @users = User.all
@@ -71,13 +72,11 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
     end
 
+    def chill
+      puts "just after action"
+    end
     # Only allow a list of trusted parameters through.
     def user_params
-      params_required = params.require(:user).permit( :name, :mobile, :password, :password_confirmation)
-      params_required.delete(:password) unless params_required[:password].present?
-      params_required.delete(:password_confirmation) unless params_required[:password_confirmation].present?
-
-      puts params_required
-      params_required
+      params.require(:user).permit( :name, :mobile, :password, :password_confirmation)
     end
 end
