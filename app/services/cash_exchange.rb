@@ -12,10 +12,10 @@ class CashExchange
         new_transfer = Exchange.new(exchange_params)
         enum_val = Exchange.primary_currencies
 
-        primary_currency = enum_val.select{|key, hash| hash == @params[:primary_currency]}.keys
-        secondary_currency = enum_val.select{|key,hash| hash == @params[:secondary_currency]}.keys
+        primary_currency_key = enum_val.select{|key, hash| hash == @params[:primary_currency]}.keys[0]
+        secondary_currency_key = enum_val.select{|key,hash| hash == @params[:secondary_currency]}.keys[0]
 
-        available_amount = account_details.read_attribute(primary_currency[0])
+        available_amount = account_details.read_attribute(primary_currency_key)
 
         ActiveRecord::Base.transaction do
           transfer_amount = @params[:amount]
@@ -29,8 +29,8 @@ class CashExchange
             puts "amount transferred #{amount_transferred}"
             puts "remaining balance #{available_amount-amount_transferred}"
 
-            account_details.update_attribute(primary_currency[0],available_amount-amount_transferred)
-            account_details.update_attribute(secondary_currency[0],account_details.read_attribute(secondary_currency[0])+amount_transferred)
+            account_details.update_attribute(primary_currency_key,available_amount-amount_transferred)
+            account_details.update_attribute(secondary_currency_key,account_details.read_attribute(secondary_currency_key)+amount_transferred)
 
             new_transfer.user_id = @params["user_id"]
             new_transfer.save!
