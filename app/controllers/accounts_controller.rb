@@ -12,4 +12,14 @@ class AccountsController < ApplicationController
       render :json=>{message:error}
     end
   end
+
+  def index
+    params["user_id"] = @current_user.id
+    begin
+      message = MiniStatement.new(params).call()
+      render json: {message: message[:message],data: message[:data]}
+    rescue =>error
+      render json: {message: error}
+    end
+  end
 end
