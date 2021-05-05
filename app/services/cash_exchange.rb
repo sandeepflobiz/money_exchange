@@ -33,6 +33,7 @@ class CashExchange
             account_details.update_attribute(secondary_currency_key,account_details.read_attribute(secondary_currency_key)+amount_transferred)
 
             new_transfer.user_id = @params["user_id"]
+            new_transfer.account_number = @params[:account_number]
             new_transfer.save!
             return {message: "money exchanged successfully"}
 

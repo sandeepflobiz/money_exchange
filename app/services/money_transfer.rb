@@ -35,6 +35,8 @@ class MoneyTransfer
             account_details.update_attribute(primary_currency_key,available_amount-transfer_amount)
             beneficiary_account.update_attribute(secondary_currency_key,beneficiary_account.read_attribute(secondary_currency_key)+transfer_amount)
 
+            new_transfer.account_number = @params[:account_number]
+            new_transfer.beneficiary_account_number = @params[:beneficiary_account_number]
             new_transfer.save!
             return {message: "tranfer successful"}
           else
