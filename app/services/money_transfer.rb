@@ -1,4 +1,4 @@
-class MoneyTransfer < ApplicationService
+class MoneyTransfer
   attr_accessor :params
 
   def initialize(params)
@@ -32,12 +32,13 @@ class MoneyTransfer < ApplicationService
             new_transfer.save!
             return {message: "tranfer successful"}
           else
-            return {message: "invalid transaction"}
+            raise InvalidTransaction.new
           end
         end
       else
         puts "invalid account number"
-        return {message: "invalid account number"}
+        # return {message: "invalid account number"}
+        raise InvalidAccount
       end
   end
 

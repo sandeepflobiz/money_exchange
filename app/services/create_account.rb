@@ -1,4 +1,4 @@
-class CreateAccount < ApplicationService
+class CreateAccount
   attr_accessor :params,:error
 
   def initialize(params)

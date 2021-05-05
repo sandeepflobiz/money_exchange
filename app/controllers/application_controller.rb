@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  include ErrorHandler
   attr_reader :current_user
 
   protected

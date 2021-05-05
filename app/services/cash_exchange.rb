@@ -1,4 +1,4 @@
-class CashExchange < ApplicationService
+class CashExchange
   attr_accessor :params
 
   def initialize(params)
@@ -21,6 +21,7 @@ class CashExchange < ApplicationService
           transfer_amount = @params[:amount]
 
           #static for rupee to dollar exchange
+          # ans = 10/0
           if (available_amount/(transfer_amount*72.5)>=1)
             puts "valid"
             amount_transferred = (transfer_amount*72.5)
@@ -37,11 +38,12 @@ class CashExchange < ApplicationService
 
           else
             puts "invalid"
-            return {message: "invalid transaction"}
+            raise InvalidTransaction
           end
         end
       else
         puts "invalid account number"
+        raise InvalidAccount
         return {message: "invalid account number"}
       end
   end
