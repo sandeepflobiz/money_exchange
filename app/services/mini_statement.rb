@@ -15,20 +15,23 @@ class MiniStatement
     credit_transfer_transactions = Transfer.where(beneficiary_id: user_id).order("created_at DESC").limit(5)
 
     exchange_transactions.each do |trans|
-      statements={amount: trans.amount,primary_currency: trans.primary_currency,secondary_currency: trans.secondary_currency}
+      statements={amount: trans.amount,primary_currency: trans.primary_currency,secondary_currency: trans.secondary_currency,
+                  account_number: trans.account_number,date: trans.created_at}
       puts statements
       @all_transactions << statements
     end
 
     debit_transfer_transactions.each do |trans|
       statements={amount: trans.amount,primary_currency: trans.primary_currency,secondary_currency: trans.secondary_currency,
-                  beneficiary_id: trans.beneficiary_id}
+                  beneficiary_id: trans.beneficiary_id,account_number: trans.account_number,
+                  beneficiary_account_number: trans.beneficiary_account_number,date: trans.created_at}
       @all_transactions << statements
     end
 
     credit_transfer_transactions.each do |trans|
       statements={amount: trans.amount,primary_currency: trans.primary_currency,secondary_currency: trans.secondary_currency,
-                  user_id: trans.user_id}
+                  user_id: trans.user_id,account_number: trans.beneficiary_account_number,
+                  donor_account_number: trans.account_number,date: trans.created_at}
       @all_transactions << statements
     end
 
