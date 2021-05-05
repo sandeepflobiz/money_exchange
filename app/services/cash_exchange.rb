@@ -20,18 +20,20 @@ class CashExchange < ApplicationService
         ActiveRecord::Base.transaction do
           transfer_amount = @params[:amount]
 
+          #static for rupee to dollar exchange
           if (available_amount/(transfer_amount*72.5)>=1)
             puts "valid"
             amount_transferred = (transfer_amount*72.5)
             # Exchange.save!
             puts "amount transferred #{amount_transferred}"
             puts "remaining balance #{available_amount-amount_transferred}"
+
             account_details.update_attribute(primary_currency[0],available_amount-amount_transferred)
             account_details.update_attribute(secondary_currency[0],account_details.read_attribute(secondary_currency[0])+amount_transferred)
 
             new_transfer.user_id = @params["user_id"]
             new_transfer.save!
-            return {message: "transferred successfully"}
+            return {message: "money exchanged successfully"}
 
           else
             puts "invalid"

@@ -3,8 +3,8 @@ class TransfersController < ApplicationController
   def create
     params["user_id"]=@current_user.id
     begin
-      MoneyTransfer.call(params)
-      render :json=>{message:"Money was successfully exchanged"}
+      message = MoneyTransfer.call(params)
+      render :json=>{message: message[:message]}
     rescue =>error
       render :json=>{message:error}
     end
