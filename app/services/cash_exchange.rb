@@ -6,9 +6,42 @@ class CashExchange < ApplicationService
   end
 
   def call
-      new_transfer = Exchange.new(exchange_params)
-      new_transfer.user_id = @params["user_id"]
-      new_transfer.save!
+      account_details = Account.find_by(user_id: @params["user_id"],account_number: @params[:account_number])
+
+      if account_details
+        new_transfer = Exchange.new(exchange_params)
+        enum_val = Exchange.primary_currencies
+
+        primary_currency = enum_val.select{|key, hash| hash == @params[:primary_currency]}.keys
+        secondary_currency = enum_val.select{|key,hash| hash == @params[:secondary_currency]}.keys
+
+        available_amount = account_details.read_attribute(primary_currency[0])
+
+        ActiveRecord::Base.transaction do
+          transfer_amount = @params[:amount]
+
+          if (available_amount/(transfer_amount*72.5)>=1)
+            puts "valid"
+            amount_transferred = (transfer_amount*72.5)
+            # Exchange.save!
+            puts "amount transferred #{amount_transferred}"
+            puts "remaining balance #{available_amount-amount_transferred}"
+            account_details.update_attribute(primary_currency[0],available_amount-amount_transferred)
+            account_details.update_attribute(secondary_currency[0],account_details.read_attribute(secondary_currency[0])+amount_transferred)
+
+            new_transfer.user_id = @params["user_id"]
+            new_transfer.save!
+            return {message: "transferred successfully"}
+
+          else
+            puts "invalid"
+            return {message: "invalid transaction"}
+          end
+        end
+      else
+        puts "invalid account number"
+        return {message: "invalid account number"}
+      end
   end
 
   private

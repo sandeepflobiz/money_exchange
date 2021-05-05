@@ -3,8 +3,8 @@ class ExchangesController < ApplicationController
   def create
     params["user_id"]=@current_user.id
     begin
-      CashExchange.(params)
-      render :json=>{message:"Money was successfully exchanged"}
+      message = CashExchange.(params)
+      render :json=>{message: message[:message]}
     rescue =>error
       render :json=>{message:error}
     end
