@@ -7,9 +7,10 @@ class MoneyTransfer
 
   def call
       redis = Redis.current
+
       puts "tranfer process initiated"
-      account_details = Account.find_by(user_id: @params["user_id"],account_number: @params[:account_number])
-      beneficiary_account = Account.find_by(user_id: @params[:beneficiary_id],account_number: @params[:beneficiary_account_number])
+      account_details = Account.lock("FOR UPDATE NOWAIT").find_by(user_id: @params["user_id"],account_number: @params[:account_number])
+      beneficiary_account = Account.lock("FOR UPDATE NOWAIT").find_by(user_id: @params[:beneficiary_id],account_number: @params[:beneficiary_account_number])
 
       if account_details && beneficiary_account
         new_transfer = Transfer.new(tranfer_params)
@@ -30,7 +31,7 @@ class MoneyTransfer
         ActiveRecord::Base.transaction do
           # for rupee to dollar
           amount_transferred = transfer_amount*conversion_rate
-          
+          puts "#{available_amount} #{amount_transferred}"
           if(available_amount>=transfer_amount)
 
             puts "amount transferred #{transfer_amount}"

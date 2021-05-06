@@ -7,8 +7,9 @@ class CashExchange
 
   def call
       redis = Redis.current
-      account_details = Account.find_by(user_id: @params["user_id"],account_number: @params[:account_number])
 
+      account_details = Account.("FOR UPDATE NOWAIT").find_by(user_id: @params["user_id"],account_number: @params[:account_number])
+      
       if account_details
         new_transfer = Exchange.new(exchange_params)
         enum_val = Exchange.primary_currencies
@@ -18,7 +19,7 @@ class CashExchange
 
         redis_key = primary_currency_key.to_s+"_"+secondary_currency_key
         conversion_rate =  redis.get(redis_key).to_d
-        
+
         available_amount = account_details.read_attribute(primary_currency_key)
 
         ActiveRecord::Base.transaction do
