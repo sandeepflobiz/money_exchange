@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
-  before_action :authenticate_request, only: %i[update]
+  before_action :authenticate, only: %i[update]
   after_action :chill
   # GET /users or /users.json
   def index

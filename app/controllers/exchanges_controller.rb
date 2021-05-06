@@ -1,5 +1,5 @@
 class ExchangesController < ApplicationController
-  before_action :authenticate_request, only: :create
+  before_action :authenticate, only: :create
   def create
     redis = Redis.current
     redis.set("saimon","sasa")

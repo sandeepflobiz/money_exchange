@@ -1,5 +1,5 @@
 class AuthenticationController < ApplicationController
-  before_action :authenticate_request,only: %i[logout]
+  before_action :authenticate,only: %i[logout]
   def authenticate_user
     user = User.find_by(mobile: params[:mobile])&.authenticate(params[:password])
     if user

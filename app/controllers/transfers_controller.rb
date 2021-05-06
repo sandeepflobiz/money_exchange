@@ -1,5 +1,5 @@
 class TransfersController < ApplicationController
-  before_action :authenticate_request
+  before_action :authenticate
   def create
     params["user_id"]=@current_user.id
     begin
