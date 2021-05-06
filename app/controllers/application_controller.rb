@@ -1,8 +1,6 @@
 class ApplicationController < ActionController::API
   include ErrorHandler
-  attr_reader :current_user
 
-  protected
   def authenticate_request
     begin
       unless user_id_in_token?
@@ -10,6 +8,14 @@ class ApplicationController < ActionController::API
         return
       end
       @current_user = User.find(auth_token[:user_id])
+      redis = Redis.current
+      saved_auth_token = redis.get(auth_token[:user_id].to_s)
+      puts "token is #{saved_auth_token}"
+      if saved_auth_token==@http_token
+        puts "valid token"
+      else
+        render json: { errors: ['Invalid Token'] }, status: :unauthorized
+      end
     rescue JWT::VerificationError, JWT::DecodeError
       render json: { errors: ['Not Authenticated'] }, status: :unauthorized
     rescue =>error

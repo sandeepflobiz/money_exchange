@@ -60,3 +60,7 @@ gem 'dotenv-rails', groups: [:development, :test]
 gem 'bcrypt-ruby', '3.1.2'
 gem 'devise'
 gem 'jwt'
+gem 'sidekiq'
+gem "sidekiq-cron", "~> 0.4.0"
+gem 'whenever', require: false
+gem 'twilio-ruby'

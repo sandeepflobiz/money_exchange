@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   post 'login' => 'authentication#authenticate_user'
+  post 'logout' => 'authentication#logout'
   resources :users, only: [:create,:edit,:index,:update]
   resources :accounts, only: [:create,:index]
   resources :transfers, only: [:create]
