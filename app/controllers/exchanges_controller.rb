@@ -1,5 +1,5 @@
 class ExchangesController < ApplicationController
-  before_action :authenticate_request
+  before_action :authenticate_request, only: :create
   def create
     redis = Redis.current
     redis.set("saimon","sasa")
@@ -8,5 +8,14 @@ class ExchangesController < ApplicationController
 
     message = CashExchange.new(params).call()
     render :json=>{message: message[:message]}
+  end
+
+  def updateExchangeRate
+    begin
+      exchange_rate = ExchangeRate.new(params).call
+      render json: {message: "Redis updated"}
+    rescue =>error
+      render json: {message: error}
+    end
   end
 end

@@ -5,5 +5,6 @@ Rails.application.routes.draw do
   resources :accounts, only: [:create,:index]
   resources :transfers, only: [:create]
   resources :exchanges, only: [:create]
+  post 'exchanges/updateExchangeRate', :to => 'exchanges#updateExchangeRate'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

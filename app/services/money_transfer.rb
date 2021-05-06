@@ -6,6 +6,7 @@ class MoneyTransfer
   end
 
   def call
+      redis = Redis.current
       puts "tranfer process initiated"
       account_details = Account.find_by(user_id: @params["user_id"],account_number: @params[:account_number])
       beneficiary_account = Account.find_by(user_id: @params[:beneficiary_id],account_number: @params[:beneficiary_account_number])
@@ -18,7 +19,9 @@ class MoneyTransfer
 
         primary_currency_key = enum_val.select{|key,hash| hash == @params[:primary_currency]}.keys[0]
         secondary_currency_key = enum_val.select{|key,hash| hash == @params[:secondary_currency]}.keys[0]
-        puts "preprocessing done #{primary_currency_key}"
+
+        redis_key = primary_currency_key.to_s+"_"+secondary_currency_key
+        conversion_rate =  redis.get(redis_key).to_d
 
         available_amount = account_details.read_attribute(primary_currency_key)
         transfer_amount = @params[:amount]
@@ -26,13 +29,14 @@ class MoneyTransfer
 
         ActiveRecord::Base.transaction do
           # for rupee to dollar
-          transfer_amount = transfer_amount*72.5
+          amount_transferred = transfer_amount*conversion_rate
+          
           if(available_amount>=transfer_amount)
 
             puts "amount transferred #{transfer_amount}"
-            puts "remaining balance #{available_amount-transfer_amount}"
+            puts "remaining balance #{available_amount-amount_transferred}"
 
-            account_details.update_attribute(primary_currency_key,available_amount-transfer_amount)
+            account_details.update_attribute(primary_currency_key,available_amount-amount_transferred)
             beneficiary_account.update_attribute(secondary_currency_key,beneficiary_account.read_attribute(secondary_currency_key)+transfer_amount)
 
             new_transfer.account_number = @params[:account_number]
