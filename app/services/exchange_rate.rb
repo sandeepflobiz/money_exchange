@@ -5,12 +5,13 @@ class ExchangeRate
   end
 
   def call
-    redis = Redis.current
-    redis.set("rupee_dollar",@params[:rupee_dollar])
-    redis.set("dollar_rupee",@params[:dollar_rupee])
-    redis.set("rupee_pound",@params[:rupee_pound])
-    redis.set("pound_rupee",@params[:pound_rupee])
-    redis.set("dollar_pound",@params[:dollar_pound])
-    redis.set("pound_dollar",@params[:pound_dollar])
+    redis = $redis
+    # redis = Redis.current
+    # use better DS Instead of set , use base currency for conversion (use USD)
+    redis.set("rupee",@params[:rupee])
+    redis.set("pound",@params[:pound])
+    redis.set("yen",@params[:rupee])
+    redis.set("taka",@params[:pound])
+    redis.set("dollar",1.00)
   end
 end

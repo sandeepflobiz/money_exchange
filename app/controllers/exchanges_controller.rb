@@ -1,5 +1,5 @@
 class ExchangesController < ApplicationController
-  before_action :authenticate, only: :create
+  skip_before_action :authenticate,only: %i[updateExchangeRate]
   def create
     redis = Redis.current
     redis.set("saimon","sasa")

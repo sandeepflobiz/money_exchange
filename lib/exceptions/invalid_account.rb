@@ -1,2 +1,0 @@
-class InvalidAccount < StandardError
-end

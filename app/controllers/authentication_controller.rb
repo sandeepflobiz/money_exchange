@@ -1,5 +1,6 @@
 class AuthenticationController < ApplicationController
-  before_action :authenticate,only: %i[logout]
+  # declare before_action in ApplicationController (save redundancy)
+  skip_before_action :authenticate, only: %i[authenticate_user]
   def authenticate_user
     user = User.find_by(mobile: params[:mobile])&.authenticate(params[:password])
     if user
@@ -15,7 +16,7 @@ class AuthenticationController < ApplicationController
       redis.del(@current_user.id)
       render json: {message: "You have successfully logged out"}
     rescue =>error
-      render json: {message: error}
+      raise InvalidToken
     end
   end
   private

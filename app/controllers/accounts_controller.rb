@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :authenticate
+  # before_action :authenticate
   def create
     puts "in"
     params["user_id"]=@current_user.id

@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::API
   include ErrorHandler
-
+  before_action :authenticate
   def authenticate
     # puts request.headers["Authorization"]
     authentication_obj = ProvideAuthentication.new(request).authenticate_request
@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
       puts authentication_obj[:data]
       @current_user = authentication_obj[:data]
     else
-      render json: {message: ["INVALID TOKEN"]}
+      raise InvalidToken.new
     end
   end
 end

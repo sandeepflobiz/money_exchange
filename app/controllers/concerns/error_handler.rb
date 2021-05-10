@@ -6,9 +6,12 @@ module ErrorHandler extend ActiveSupport::Concern
   def custom_response(exception)
     puts "exception is #{exception}"
     if exception.class == InvalidTransaction
-      render json: {message: "Invalid Transaction"}
-    elsif exception.class == InvalidAccount
-      render json: {message: "Invalid Account Number"}
+      puts exception
+      render json: {message: exception.message}
+    elsif exception.class == InvalidToken
+      render json: {message: "Invalid Token"}
+    elsif exception.class == UnknownError
+      render json: {message: "Something went wrong"}
     else
       render json: {message: "Unknow Error"}
     end

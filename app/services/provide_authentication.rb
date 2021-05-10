@@ -11,6 +11,8 @@ class ProvideAuthentication
         return
       end
       @current_user = User.find(auth_token[:user_id])
+
+      # use initializer for calling redis (redo)
       redis = Redis.current
       saved_auth_token = redis.get(auth_token[:user_id].to_s)
       puts "token is #{saved_auth_token}"
