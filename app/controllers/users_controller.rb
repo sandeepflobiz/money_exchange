@@ -19,7 +19,6 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    puts "in edit method"
     render :json=>{message: "edit method"}
   end
 

@@ -16,5 +16,3 @@ end
 user = User.new
 user.name = "sandeep"
 user.email = "sandeep"
-
-puts user.name

@@ -7,12 +7,10 @@ class MiniStatement
   def call
 
     user_id = @params["user_id"]
-    puts user_id
     @all_transactions=[]
 
     # try optimize the entire transaction below (use scopes for filtering)
     entire_transactions = User.joins(:exchanges,:transfers).order("created_at DESC").limit(15)[0]
-    # puts entire_transactions
     # exchange_transactions = Exchange.where(user_id: user_id).order("created_at DESC").limit(5)
     # transfer_transactions = Transfer.where("user_id = ? OR beneficiary_id = ?",user_id,user_id).order("created_at DESC").limit(5)
     # credit_transfer_transactions = Transfer.where(beneficiary_id: user_id).order("created_at DESC").limit(5)

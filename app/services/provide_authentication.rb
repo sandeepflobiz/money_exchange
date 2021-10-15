@@ -39,8 +39,6 @@ class ProvideAuthentication
   end
 
   def user_id_in_token?
-    puts auth_token # contains {"user_id"=>1}
-    puts http_token # contains eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.wJWmpJgyWYJv2BBySh8M5te83UBwDUMkHsWi_F4zJAo
     http_token && auth_token && auth_token[:user_id].to_i
   end
 end

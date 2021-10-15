@@ -20,6 +20,5 @@
 # Learn more: http://github.com/javan/whenever
 set :output, "/Users/flobiz/Documents/rails_project/money_exchange/log/cron.log"
 every 1.minute do
-  puts "hi"
   rake 'sample:test'
 end

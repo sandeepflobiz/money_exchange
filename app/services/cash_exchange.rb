@@ -18,7 +18,6 @@ class CashExchange
         conversion_rate =  primary_value/secondary_value
         available_amount = account_details[@params[:primary_currency]]
         transfer_amount = @params[:amount]
-        puts "here"
         ActiveRecord::Base.transaction do
           #static for rupee to dollar exchange
           # ans = 10/0

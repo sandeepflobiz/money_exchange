@@ -6,7 +6,6 @@ class MoneyTransfer
   end
 
   def call
-      puts "er"
       redis = $redis
       account_details = Account.valid_account(@params["user_id"],@params[:account_number])[0]
       beneficiary_account = Account.valid_account(@params[:beneficiary_id],@params[:beneficiary_account_number])[0]
