@@ -23,11 +23,8 @@ class CashExchange
           #static for rupee to dollar exchange
           # ans = 10/0
           if (available_amount/(transfer_amount*conversion_rate)>=1)
-            puts "valid"
             amount_transferred = (transfer_amount*conversion_rate)
             # Exchange.save!
-            puts "amount transferred #{amount_transferred}"
-            puts "remaining balance #{available_amount-amount_transferred}"
 
             account_details.update_attribute(@params[:primary_currency],available_amount-amount_transferred)
             account_details.update_attribute(@params[:secondary_currency],account_details[@params[:secondary_currency]]+transfer_amount)
@@ -36,14 +33,11 @@ class CashExchange
             new_transfer.account_number = @params[:account_number]
             new_transfer.save!
             return {message: "money exchanged successfully"}
-
           else
-            puts "invalid"
             raise InvalidTransaction.new("Invalid Transaction")
           end
         end
       else
-        puts "invalid account number"
         raise InvalidTransaction.new("Invalid Transaction")
       end
   end

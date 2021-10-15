@@ -2,12 +2,10 @@ class CreateAccount
   attr_accessor :params,:error
 
   def initialize(params)
-    puts "initializer has been called"
     @params = params
   end
 
   def call
-      puts "call method has been called"
       new_account = Account.new(account_params)
       new_account.user_id = @params["user_id"]
       new_account.save!

@@ -17,7 +17,6 @@ class MoneyTransfer
 
         primary_value = redis.get((@params[:primary_currency]).to_s).to_d
         secondary_value = redis.get((@params[:secondary_currency]).to_s).to_d
-        puts "#{@params[:primary_value]} #{@params[:secondary_value]}"
         conversion_rate =  primary_value/secondary_value
         available_amount = account_details[@params[:primary_currency]]
         transfer_amount = @params[:amount]
@@ -25,12 +24,7 @@ class MoneyTransfer
         ActiveRecord::Base.transaction do
           # for rupee to dollar
           amount_transferred = transfer_amount*conversion_rate
-          puts "#{available_amount} #{amount_transferred}"
           if(available_amount>=amount_transferred)
-
-            puts "amount transferred #{transfer_amount}"
-            puts "remaining balance #{available_amount-amount_transferred}"
-
             account_details.update_attribute(@params[:primary_currency],available_amount-amount_transferred)
             beneficiary_account.update_attribute(@params[:secondary_currency],beneficiary_account[@params[:secondary_currency]]+transfer_amount)
 

@@ -15,10 +15,7 @@ class ProvideAuthentication
       # use initializer for calling redis (redo)
       redis = Redis.current
       saved_auth_token = redis.get(auth_token[:user_id].to_s)
-      puts "token is #{saved_auth_token}"
-      puts "Dsaddfghk"
       if saved_auth_token==@http_token
-        puts "valid token"
         return { message: "SUCCESS",data: @current_user}
       else
         return { message: ['Invalid Token'] }

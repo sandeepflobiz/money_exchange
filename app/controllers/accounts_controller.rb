@@ -4,10 +4,8 @@ class AccountsController < ApplicationController
     puts "in"
     params["user_id"]=@current_user.id
     begin
-      puts "hi #{params}"
       create_account = CreateAccount.new(params)
       create_account.call()
-      # CreateAccount.call(params)
       render :json=>{message:"Account created successfully"}
     rescue =>error
       render :json=>{message:error}
