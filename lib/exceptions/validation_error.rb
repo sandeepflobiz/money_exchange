@@ -1,4 +1,4 @@
-class UnknownError < StandardError
+class ValidationError < StandardError
   attr_accessor :message
   def initialize(message)
     @message = message

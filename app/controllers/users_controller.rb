@@ -9,6 +9,7 @@ class UsersController < ApplicationController
 
   # GET /users/1 or /users/1.json
   def show
+    @user
   end
 
   # GET /users/new
@@ -28,22 +29,28 @@ class UsersController < ApplicationController
     @user.mobile = params[:mobile]
     @user.password = params[:password]
     @user.password_confirmation = params[:password_confirmation]
-    @user.save!
-
-    render 'app/views/users'
+    begin
+      @user.save!
+      render 'users/index'
+    rescue => error
+      raise UnknownError.new(error.message)
+    end
   end
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
     begin
-      @user = User.find(params[:id])
+      # @user = User.find(params[:id])
+      raise ValidationError.new("You do not have the access to perform this action") if params[:id] != @user.id
       @user.name = params[:name]
       @user.password = params[:password]
       @user.save!
 
-      render :json=>{message:"Updated successfully"}
-    rescue =>error
-      render json:{message:error}
+      render 'users/show'
+    rescue ValidationError=> error
+      raise ValidationError.new(error.message)
+    rescue => error
+      raise UnknownError.new(error.message)
     end
   end
 

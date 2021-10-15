@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 2021_05_05_160401) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "accounts", force: :cascade do |t|
+  create_table "accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "account_number"
     t.integer "user_id"
     t.decimal "rupee"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 2021_05_05_160401) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "exchanges", force: :cascade do |t|
+  create_table "exchanges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "user_id"
     t.integer "primary_currency", default: 0
     t.integer "secondary_currency", default: 0
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2021_05_05_160401) do
     t.integer "account_number"
   end
 
-  create_table "transfers", force: :cascade do |t|
+  create_table "transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "user_id"
     t.integer "beneficiary_id"
     t.integer "primary_currency", default: 0
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2021_05_05_160401) do
     t.integer "beneficiary_account_number"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "mobile"
     t.string "password_digest"

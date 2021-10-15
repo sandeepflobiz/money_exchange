@@ -64,3 +64,6 @@ gem 'sidekiq'
 gem "sidekiq-cron", "~> 0.4.0"
 gem 'whenever', require: false
 gem 'twilio-ruby'
+gem 'pry'
+gem 'pry-byebug'
+gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
