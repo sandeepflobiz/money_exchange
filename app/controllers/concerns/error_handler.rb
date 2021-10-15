@@ -11,7 +11,7 @@ module ErrorHandler extend ActiveSupport::Concern
     elsif exception.class == UnknownError
       render json: {message: "Something went wrong"}
     else
-      render json: {message: "Unknow Error"}
+      render json: {message: exception.message}
     end
   end
 end

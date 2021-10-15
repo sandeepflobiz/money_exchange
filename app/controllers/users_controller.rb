@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
   skip_before_action :authenticate, only: %i[index edit show create destroy new]
-  after_action :chill
   # GET /users or /users.json
   def index
     @users = User.all
@@ -29,17 +28,9 @@ class UsersController < ApplicationController
     @user.mobile = params[:mobile]
     @user.password = params[:password]
     @user.password_confirmation = params[:password_confirmation]
-    begin
+    @user.save!
 
-      @user.save!
-      render json: {message: "record created successfully"}
-      # format.html { redirect_to @user, notice: "User was successfully created." }
-      # format.json { render :show, status: :created, location: @user }
-    rescue =>error
-      render json: {message: error}
-      # format.html { render :new, status: :unprocessable_entity }
-      # format.json { render json: @user.errors, status: :unprocessable_entity }
-    end
+    render 'app/views/users'
   end
 
   # PATCH/PUT /users/1 or /users/1.json
@@ -71,9 +62,6 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
     end
 
-    def chill
-      puts "just after action"
-    end
     # Only allow a list of trusted parameters through.
     def user_params
       params.require(:user).permit( :name, :mobile, :password, :password_confirmation)
