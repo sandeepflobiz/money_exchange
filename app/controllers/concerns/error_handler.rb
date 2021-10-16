@@ -11,7 +11,7 @@ module ErrorHandler extend ActiveSupport::Concern
     elsif exception.class == ValidationError
       render json: {message: exception.message},status: 400
     elsif exception.class == UnknownError
-      render json: {message: "Something went wrong"},status: 500
+      render json: {message: exception.message},status: 500
     else
       render json: {message: exception}
     end

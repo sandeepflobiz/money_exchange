@@ -7,8 +7,7 @@ class ProvideAuthentication
   def authenticate_request
     begin
       unless user_id_in_token?
-        return { message: ['Not Authenticated'] }
-        return
+        raise ValidationError.new("Not Authenticated")
       end
       @current_user = User.find(auth_token[:user_id])
 
@@ -18,12 +17,14 @@ class ProvideAuthentication
       if saved_auth_token==@http_token
         return { message: "SUCCESS",data: @current_user}
       else
-        return { message: ['Invalid Token'] }
+        raise InvalidToken.new("Invalid Token")
       end
     rescue JWT::VerificationError, JWT::DecodeError
-      return { message: ['Not Authenticated'] }
+      raise ValidationError.new("Not Authenticated")
+    rescue InvalidToken=> error
+      raise InvalidToken.new(error.message)
     rescue =>error
-      return { message: error}
+      raise UnknownError.new(error.message)
     end
   end
 
